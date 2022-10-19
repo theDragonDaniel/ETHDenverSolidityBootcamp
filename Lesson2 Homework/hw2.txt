@@ -24,3 +24,25 @@ Homework 2
 4. Using remix add this contract as a source file
 	1. Compile the contract
 	2. Deploy the contract to the Remix VM environment
+
+// SPDX-License-Identifier: None
+
+pragma solidity 0.8.17;
+
+
+contract BootcampContract {
+
+    uint256 number;
+
+
+    function store(uint256 num) public {
+        number = num;
+    }
+
+
+    function retrieve() public view returns (uint256){
+        return number;
+    }
+}
+
+
