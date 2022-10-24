@@ -1,0 +1,73 @@
+Homework 5
+1. Install a browser wallet such as Metamask
+	1. Connect to the Goerli Test network
+		Done
+	2. Set up a wallet that will be used by your team for the team games
+		0x43114F0b526EdC8aA40fE929488921771bef921e
+	3. If you need some test ETH, lets us know and we can send some to your team.
+		Done
+
+2. Update your Volcano coin contract to inherit from the Open Zeppelin Ownable
+contract, and use this to replace the owner functionality in your contract.
+	Done
+
+
+// SPDX-License-Identifier: UNLICENSED
+
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract VolcanoCoin is Ownable {
+    
+    
+    //address owner;
+    uint256 totalSupply = 10000;
+    mapping(address => uint256) public balances;
+    mapping(address => Payment[]) public payments;
+
+    struct Payment {
+        address userAddress;
+        uint256 userAmount;
+    }
+    
+    Payment[] public transfers;
+    
+
+    constructor() {
+        //owner = msg.sender;
+        balances[msg.sender]=totalSupply;
+        
+    }
+
+    //modifier onlyOwner {
+    //    if (msg.sender == owner) {
+    //         _;
+    //    }
+    // }
+
+    event totalSupplyChange(uint256);
+    event transferDone(uint256, address);
+
+    function getTotalSupply() public view returns (uint256){
+        return totalSupply;
+    }
+
+    function addSupply() public onlyOwner {
+        totalSupply = totalSupply + 1000;
+        emit totalSupplyChange(totalSupply);
+    }
+
+    function transfer(address recipient, uint256 amount) public {
+        balances[msg.sender] = balances[msg.sender] - amount;
+        
+        balances[recipient] = balances[recipient] + amount;
+        emit transferDone(amount, recipient);
+        transfers.push(Payment({userAddress:recipient,userAmount:amount}));
+        payments[msg.sender].push(Payment({userAddress:recipient,userAmount:amount}));
+    }
+
+
+    }
+
+
