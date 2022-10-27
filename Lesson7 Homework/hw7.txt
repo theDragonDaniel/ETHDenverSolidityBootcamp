@@ -1,0 +1,85 @@
+Homework 7
+Adding more functionality to the Volcano Coin contract
+
+1. We made a payment mapping, but we haven’t added all the functionality for it yet.
+	Write a function to view the payment records, specifying the user as an input.
+		Done
+
+	What is the difference between doing this and making the mapping public ?
+		This way lists all transactions done. Using the public mapping way requires you to
+		already know the address and the transaction order you are looking for.
+
+2. For the payments record mapping, create a function called recordPayment that
+takes
+	1. the sender’s address,
+	2. the receiver’s address and
+	3. the amount
+as an input, then creates a new payment record and adds the new record to the
+user’s payment record.
+	Done
+
+3. Each time we make a transfer of tokens, we should call the this recordPayment
+function to record the transfer.
+	Done
+
+
+// SPDX-License-Identifier: UNLICENSED
+
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract VolcanoCoin is Ownable {
+    
+    
+    //address owner;
+    uint256 totalSupply = 10000;
+    mapping(address => uint256) public balances;
+    mapping(address => Payment[]) public payments;
+
+    struct Payment {
+        address userAddress;
+        uint256 userAmount;
+    }
+    
+    Payment[] public transfers;
+    
+
+    constructor() {
+        //owner = msg.sender;
+        balances[msg.sender]=totalSupply;
+        
+    }
+
+    event totalSupplyChange(uint256);
+    event transferDone(uint256, address);
+
+    function getTotalSupply() public view returns (uint256){
+        return totalSupply;
+    }
+
+    function addSupply() public onlyOwner {
+        totalSupply = totalSupply + 1000;
+        emit totalSupplyChange(totalSupply);
+    }
+
+    function transfer(address recipient, uint256 amount) public {
+        balances[msg.sender] = balances[msg.sender] - amount;
+        
+        balances[recipient] = balances[recipient] + amount;
+        emit transferDone(amount, recipient);
+        transfers.push(Payment({userAddress:recipient,userAmount:amount}));
+        //payments[msg.sender].push(Payment({userAddress:recipient,userAmount:amount}));
+        recordPayment(msg.sender,recipient,amount);
+    }
+    function paymentLookup(address _address) public view returns (Payment[] memory){
+        return payments[_address];
+    }
+
+    function recordPayment(address _sender, address _recipient, uint256 _amount) private {
+        payments[_sender].push(Payment({userAddress:_recipient,userAmount:_amount}));
+    }
+
+
+    }
+
