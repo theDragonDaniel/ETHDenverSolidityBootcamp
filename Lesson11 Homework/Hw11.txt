@@ -1,0 +1,16 @@
+Homework 11
+Continue developing your Volcano NFT project
+1. Add a function that allows a user to mint an NFT if they pay 0.01 ETH, or an amount of
+Volcano coin (decide on a price yourself).
+Done.
+
+2. Make sure that when a token is minted we can specify a token URI - a location where
+we can store metadata / images for the NFT.
+Done
+
+3. What would be the problem with providing a function to allow us to change the token
+URI ?
+Is there is poor security, some one could modify the URI with malicious intent.
+
+4. Review the notes about the EVM in Lesson 5 in preparation for tomorrow's lesson
+about gas optimisation.
