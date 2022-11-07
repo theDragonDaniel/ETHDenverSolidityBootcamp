@@ -56,7 +56,7 @@ contract GasContract {
                 return true;
             }
         }
-        revert Unauthorized();
+        revert ("Caller not admin");
     }
 
     function transfer(
